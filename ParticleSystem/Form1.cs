@@ -23,7 +23,7 @@ namespace ParticleSystem
         {
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
-
+            /*
             this.emitter = new Emitter // создаю эмиттер и привязываю его к полю emitter
             {
                 Direction = 0,
@@ -35,9 +35,22 @@ namespace ParticleSystem
                 ParticlesPerTick = 10,
                 X = picDisplay.Width / 2,
                 Y = picDisplay.Height / 2,
-            };
+            };*/
 
             emitters.Add(this.emitter);
+
+            emitter = new TopEmitter
+            {
+                Direction = 0,
+                Spreading = 10,
+                SpeedMin = 10,
+                SpeedMax = 10,
+                ColorFrom = Color.Gold,
+                ColorTo = Color.FromArgb(0, Color.Red),
+                ParticlesPerTick = 10,
+                Width = picDisplay.Width,
+                GravitationY = 0f
+            };
             /* 
             point1 = new GravityPoint
             {
@@ -54,11 +67,7 @@ namespace ParticleSystem
             //emitter.impactPoints.Add(point1);
             emitter.impactPoints.Add(point2);
             
-            emitter = new TopEmitter
-            {
-                Width = picDisplay.Width,
-                GravitationY = 0.25f
-            };
+            
             
             emitter.impactPoints.Add(new GravityPoint
             {
@@ -119,14 +128,7 @@ namespace ParticleSystem
 
         private void button2_Click(object sender, EventArgs e)
         {
-            emitter.UpdateState();
-            using (var g = Graphics.FromImage(picDisplay.Image))
-            {
-                g.Clear(Color.Black);
-                emitter.Render(g);
-            }
-
-            picDisplay.Invalidate();
+            timer1_Tick(sender, e);
         }
     }
 }
