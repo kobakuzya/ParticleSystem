@@ -18,7 +18,7 @@ namespace ParticleSystem
         GravityPoint point1; // добавил поле под первую точку
         GravityPoint point2;
         */
-
+        ColorPoint point1;
         public Form1()
         {
             InitializeComponent();
@@ -51,12 +51,18 @@ namespace ParticleSystem
                 Width = picDisplay.Width,
                 GravitationY = 0f
             };
-            /* 
-            point1 = new GravityPoint
+            
+            point1 = new ColorPoint
             {
-                X = picDisplay.Width / 2 + 100,
+                X = picDisplay.Width / 2,
                 Y = picDisplay.Height / 2,
             };
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width * 0.25),
+                Y = picDisplay.Height / 2
+            });
+            /*
             point2 = new GravityPoint
             {
                 X = picDisplay.Width / 2 - 100,
@@ -69,7 +75,7 @@ namespace ParticleSystem
             
             
             
-            emitter.impactPoints.Add(new GravityPoint
+            emitter.impactPoints.Add(new ColorPoint
             {
                 X = (float)(picDisplay.Width * 0.25),
                 Y = picDisplay.Height / 2

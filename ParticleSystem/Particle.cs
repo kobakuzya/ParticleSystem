@@ -12,6 +12,7 @@ namespace ParticleSystem
         public float SpeedX; // скорость перемещения по оси X
         public float SpeedY; // скорость перемещения по оси Y
         public float Life;
+        public Color color = Color.Red;
         // добавили генератор случайных чисел
         public static Random rand = new Random();
 
@@ -27,6 +28,7 @@ namespace ParticleSystem
             SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
             Radius = 2 + rand.Next(10);
             Life = 20 + rand.Next(100);
+            
         }
 
         public virtual void Draw(Graphics g)
@@ -67,7 +69,7 @@ namespace ParticleSystem
             float k = Math.Min(1f, Life / 100);
 
             // так как k уменьшается от 1 до 0, то порядок цветов обратный
-            var color = MixColor(ToColor, FromColor, k);
+            color = MixColor(ToColor, FromColor, k);
             var b = new SolidBrush(color);
             //g.DrawLine(new Pen(Color.White, 2), 0, 0, 25, 0);
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);

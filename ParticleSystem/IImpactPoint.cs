@@ -91,4 +91,33 @@ namespace ParticleSystem
             particle.SpeedY -= gY * Power / r2; // и тут
         }
     }
+
+    public class ColorPoint : IImpactPoint
+    {
+        public override void Render(Graphics g)
+        {
+            // буду рисовать окружность с диаметром равным Power
+            g.DrawEllipse(
+                   new Pen(Color.Red),
+                   X - 5,
+                   Y - 5,
+                   100,
+                   100
+               );
+        }
+        public override void ImpactParticle(Particle particle)
+        {
+            float gX = X - particle.X;
+            float gY = Y - particle.Y;
+
+            double r = Math.Sqrt(gX * gX + gY * gY); // считаем расстояние от центра точки до центра частицы
+            if (r + particle.Radius < 10) // если частица оказалось внутри окружности
+            {
+                // то притягиваем ее
+                float r2 = (float)Math.Max(100, gX * gX + gY * gY);
+                particle.color = Color.Red;
+                
+            }
+        }
+    }
 }
