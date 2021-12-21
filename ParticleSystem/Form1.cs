@@ -14,9 +14,11 @@ namespace ParticleSystem
     {
         List<Emitter> emitters = new List<Emitter>();
         Emitter emitter;
-
+        /*
         GravityPoint point1; // добавил поле под первую точку
         GravityPoint point2;
+        */
+
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace ParticleSystem
             };
 
             emitters.Add(this.emitter);
-
+            /* 
             point1 = new GravityPoint
             {
                 X = picDisplay.Width / 2 + 100,
@@ -51,7 +53,7 @@ namespace ParticleSystem
             // привязываем поля к эмиттеру
             //emitter.impactPoints.Add(point1);
             emitter.impactPoints.Add(point2);
-            /*
+            
             emitter = new TopEmitter
             {
                 Width = picDisplay.Width,
@@ -94,25 +96,37 @@ namespace ParticleSystem
         {
             emitter.MousePositionX = e.X;
             emitter.MousePositionY = e.Y;
-
+            /*
             point2.X = e.X;
             point2.Y = e.Y;
+            */
         }
 
-        private void tbDirection_Scroll(object sender, EventArgs e)
+        
+            //emitter.Direction = tbDirection.Value; // направлению эмиттера присваиваем значение ползунка
+            //lblDirection.Text = $"{tbDirection.Value}°";
+        
+
+        private void tbSpeed_Scroll(object sender, EventArgs e)
         {
-            emitter.Direction = tbDirection.Value; // направлению эмиттера присваиваем значение ползунка
-            lblDirection.Text = $"{tbDirection.Value}°";
+            timer1.Interval = tbSpeed.Value;
         }
 
-        private void tbGraviton_Scroll(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            point2.Power = tbGraviton.Value;
+            timer1.Enabled = !timer1.Enabled;
         }
 
-        private void tbGraviton2_Scroll(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            point1.Power = tbGraviton2.Value;
+            emitter.UpdateState();
+            using (var g = Graphics.FromImage(picDisplay.Image))
+            {
+                g.Clear(Color.Black);
+                emitter.Render(g);
+            }
+
+            picDisplay.Invalidate();
         }
     }
 }
