@@ -12,53 +12,107 @@ namespace ParticleSystem
 {
     public partial class Form1 : Form
     {
-        List<Particle> particles = new List<Particle>();
+        List<Emitter> emitters = new List<Emitter>();
+        Emitter emitter;
+
+        GravityPoint point1; // добавил поле под первую точку
+        GravityPoint point2;
         public Form1()
         {
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-            for (var i = 0; i < 500; ++i)
+            this.emitter = new Emitter // создаю эмиттер и привязываю его к полю emitter
             {
-                var particle = new Particle();
-                // переношу частицы в центр изображения
-                particle.X = picDisplay.Image.Width / 2;
-                particle.Y = picDisplay.Image.Height / 2;
-                // добавляю список
-                particles.Add(particle);
-            }
-        }
+                Direction = 0,
+                Spreading = 10,
+                SpeedMin = 10,
+                SpeedMax = 10,
+                ColorFrom = Color.Gold,
+                ColorTo = Color.FromArgb(0, Color.Red),
+                ParticlesPerTick = 10,
+                X = picDisplay.Width / 2,
+                Y = picDisplay.Height / 2,
+            };
 
-        private void UpdateState()
-        {
-            foreach (var particle in particles)
+            emitters.Add(this.emitter);
+
+            point1 = new GravityPoint
             {
-                var directionInRadians = particle.Direction / 180 * Math.PI;
-                particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
-                particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
-            }
-        }
-
-        // функция рендеринга
-        private void Render(Graphics g)
-        {
-            // утащили сюда отрисовку частиц
-            foreach (var particle in particles)
+                X = picDisplay.Width / 2 + 100,
+                Y = picDisplay.Height / 2,
+            };
+            point2 = new GravityPoint
             {
-                particle.Draw(g);
-            }
-        }
+                X = picDisplay.Width / 2 - 100,
+                Y = picDisplay.Height / 2,
+            };
 
+            // привязываем поля к эмиттеру
+            //emitter.impactPoints.Add(point1);
+            emitter.impactPoints.Add(point2);
+            /*
+            emitter = new TopEmitter
+            {
+                Width = picDisplay.Width,
+                GravitationY = 0.25f
+            };
+            
+            emitter.impactPoints.Add(new GravityPoint
+            {
+                X = (float)(picDisplay.Width * 0.25),
+                Y = picDisplay.Height / 2
+            });
+
+            // в центре антигравитон
+            emitter.impactPoints.Add(new AntiGravityPoint
+            {
+                X = picDisplay.Width / 2,
+                Y = picDisplay.Height / 2
+            });
+
+            // снова гравитон
+            emitter.impactPoints.Add(new GravityPoint
+            {
+                X = (float)(picDisplay.Width * 0.75),
+                Y = picDisplay.Height / 2
+            });
+            */
+        }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            UpdateState();
+            emitter.UpdateState();
             using (var g = Graphics.FromImage(picDisplay.Image))
             {
-                g.Clear(Color.White);
-                Render(g);
+                g.Clear(Color.Black);
+                emitter.Render(g);
             }
 
             picDisplay.Invalidate();
+        }
+        private void picDisplay_MouseMove(object sender, MouseEventArgs e)
+        {
+            emitter.MousePositionX = e.X;
+            emitter.MousePositionY = e.Y;
+
+            point2.X = e.X;
+            point2.Y = e.Y;
+        }
+
+        private void tbDirection_Scroll(object sender, EventArgs e)
+        {
+            emitter.Direction = tbDirection.Value; // направлению эмиттера присваиваем значение ползунка
+            lblDirection.Text = $"{tbDirection.Value}°";
+        }
+
+        private void tbGraviton_Scroll(object sender, EventArgs e)
+        {
+            point2.Power = tbGraviton.Value;
+        }
+
+        private void tbGraviton2_Scroll(object sender, EventArgs e)
+        {
+            point1.Power = tbGraviton2.Value;
         }
     }
 }
