@@ -37,7 +37,7 @@ namespace ParticleSystem
                 Y = picDisplay.Height / 2,
             };*/
 
-            emitters.Add(this.emitter);
+            //emitters.Add(this.emitter);
 
             emitter = new TopEmitter
             {
@@ -45,8 +45,8 @@ namespace ParticleSystem
                 Spreading = 10,
                 SpeedMin = 10,
                 SpeedMax = 10,
-                ColorFrom = Color.Gold,
-                ColorTo = Color.FromArgb(0, Color.Red),
+                ColorFrom = Color.White,
+                ColorTo = Color.FromArgb(0, Color.Black),
                 ParticlesPerTick = 10,
                 Width = picDisplay.Width,
                 GravitationY = 0f

@@ -69,23 +69,17 @@ namespace ParticleSystem
 
             foreach (var particle in particles)
             {
-                //particle.Life -= 1; // уменьшаю здоровье
-                                    // если здоровье кончилось
                 if (particle.Life <= 0)
                 {
                     if (particlesToCreate > 0)
                     {
-                        /* у нас как сброс частицы равносилен созданию частицы */
-                        particlesToCreate -= 1; // поэтому уменьшаем счётчик созданных частиц на 1
+                        particlesToCreate -= 1;
                         ResetParticle(particle);
                     }
                 }
                 else
                 {
-                    particle.X += particle.SpeedX;
-                    particle.Y += particle.SpeedY;
-                    // сделаем сначала для одной точки
-                    // и так считаем вектор притяжения к точке
+                    particle.Life -= 1;
                     foreach (var point in impactPoints)
                     {
                         point.ImpactParticle(particle);
@@ -94,9 +88,11 @@ namespace ParticleSystem
                     particle.SpeedX += GravitationX;
                     particle.SpeedY += GravitationY;
 
-                    
+                    particle.X += particle.SpeedX;
+                    particle.Y += particle.SpeedY;
                 }
             }
+
             while (particlesToCreate >= 1)
             {
                 particlesToCreate -= 1;
@@ -106,7 +102,6 @@ namespace ParticleSystem
             }
         }
 
-        // функция рендеринга
         public void Render(Graphics g)
         {
             // утащили сюда отрисовку частиц
