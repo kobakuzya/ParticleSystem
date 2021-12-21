@@ -12,6 +12,7 @@ namespace ParticleSystem
         public float Direction; // направление движения
         public float Speed; // скорость перемещения
         public float Life;
+        // Тест гита
         // добавили генератор случайных чисел
         public static Random rand = new Random();
 
