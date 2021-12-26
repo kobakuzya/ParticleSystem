@@ -25,7 +25,7 @@ namespace ParticleSystem
 
         
 
-        List<Particle> particles = new List<Particle>();
+        List<ParticleColorful> particles = new List<ParticleColorful>();
 
         public int MousePositionX;
         public int MousePositionY;
@@ -36,8 +36,7 @@ namespace ParticleSystem
         public int ParticlesPerTick = 1;
 
         public List<IImpactPoint> impactPoints = new List<IImpactPoint>();
-
-        public virtual Particle CreateParticle()
+        public virtual ParticleColorful CreateParticle()
         {
             var particle = new ParticleColorful();
             particle.FromColor = ColorFrom;
@@ -45,8 +44,10 @@ namespace ParticleSystem
 
             return particle;
         }
-        public virtual void ResetParticle(Particle particle)
+        public virtual void ResetParticle(ParticleColorful particle)
         {
+            particle.FromColor = Color.White;
+            //particle = new ParticleColorful();
             particle.Life = Particle.rand.Next(LifeMin, LifeMax);
 
             particle.X = X;
@@ -121,9 +122,9 @@ namespace ParticleSystem
     {
         public int Width; // длина экрана
 
-        public override void ResetParticle(Particle particle)
+        public override void ResetParticle(ParticleColorful particle)
         {
-            particle.Life -= 1;
+            //particle.Life -= 1;
             base.ResetParticle(particle); // вызываем базовый сброс частицы, там жизнь переопределяется и все такое
 
             // а теперь тут уже подкручиваем параметры движения

@@ -52,15 +52,31 @@ namespace ParticleSystem
                 GravitationY = 0f
             };
             
-            point1 = new ColorPoint
+            /*point1 = new ColorPoint
             {
                 X = picDisplay.Width / 2,
                 Y = picDisplay.Height / 2,
             };
+            */
             emitter.impactPoints.Add(new ColorPoint
             {
                 X = (float)(picDisplay.Width * 0.25),
-                Y = picDisplay.Height / 2
+                Y = picDisplay.Height / 2,
+                color = Color.Red
+            });
+
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width/2),
+                Y = picDisplay.Height / 2,
+                color = Color.Yellow
+            });
+
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width * 0.75f),
+                Y = picDisplay.Height / 2,
+                color = Color.DarkBlue
             });
             /*
             point2 = new GravityPoint
@@ -109,8 +125,8 @@ namespace ParticleSystem
         }
         private void picDisplay_MouseMove(object sender, MouseEventArgs e)
         {
-            emitter.MousePositionX = e.X;
-            emitter.MousePositionY = e.Y;
+            //emitter.MousePositionX = e.X;
+            //emitter.MousePositionY = e.Y;
             /*
             point2.X = e.X;
             point2.Y = e.Y;
@@ -135,6 +151,18 @@ namespace ParticleSystem
         private void button2_Click(object sender, EventArgs e)
         {
             timer1_Tick(sender, e);
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            foreach (var p in emitter.impactPoints)
+            {
+                if (p is ColorPoint) // так как impactPoints не обязательно содержит поле Power, надо проверить на тип 
+                {
+                    // если гравитон то меняем силу
+                    (p as ColorPoint).Y = trackBar1.Value;
+                }
+            }
         }
     }
 }

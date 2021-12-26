@@ -37,9 +37,23 @@ namespace ParticleSystem
             int alpha = (int)(k * 255);
             // создали кисть для рисования
             var color = Color.FromArgb(alpha, Color.Black);
+            color = ParticleColor(alpha, Color.Black);
             var b = new SolidBrush(color);
             // нарисовали залитый кружок радиусом Radius с центром в X, Y
             
+            g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
+
+            b.Dispose();
+        }
+        
+        public Color ParticleColor(int alpha, Color color)
+        {
+            return Color.FromArgb(alpha, Color.Black);
+        }
+
+        public void ChangeCollor(Graphics g, Color color)
+        {
+            var b = new SolidBrush(color);
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
 
             b.Dispose();
@@ -69,9 +83,9 @@ namespace ParticleSystem
             float k = Math.Min(1f, Life / 100);
 
             // так как k уменьшается от 1 до 0, то порядок цветов обратный
-            color = MixColor(ToColor, FromColor, k);
+            var color = MixColor(ToColor, FromColor, k);
             var b = new SolidBrush(color);
-            //g.DrawLine(new Pen(Color.White, 2), 0, 0, 25, 0);
+            g.DrawLine(new Pen(Color.White, 2), 0, 0, 25, 0);
             g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
 
             b.Dispose();
