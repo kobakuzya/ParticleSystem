@@ -19,11 +19,9 @@ namespace ParticleSystem
         public int LifeMin = 20; // минимальное время жизни частицы
         public int LifeMax = 100; // максимальное время жизни частицы
         public int ParticlesCount = 500;
-
+        public bool a = true;
         public Color ColorFrom = Color.White; // начальный цвет частицы
         public Color ColorTo = Color.FromArgb(0, Color.Black); // конечный цвет частиц
-
-        
 
         List<ParticleColorful> particles = new List<ParticleColorful>();
 
@@ -46,61 +44,72 @@ namespace ParticleSystem
         }
         public virtual void ResetParticle(ParticleColorful particle)
         {
-            particle.FromColor = Color.White;
-            //particle = new ParticleColorful();
-            particle.Life = Particle.rand.Next(LifeMin, LifeMax);
+                particle.FromColor = Color.White;
+                //particle = new ParticleColorful();
+                particle.Life = Particle.rand.Next(LifeMin, LifeMax);
 
-            particle.X = X;
-            particle.Y = Y;
+                particle.X = X;
+                particle.Y = Y;
 
-            var direction = Direction
-                + (double)Particle.rand.Next(Spreading)
-                - Spreading / 2;
+                var direction = Direction
+                    + (double)Particle.rand.Next(Spreading)
+                    - Spreading / 2;
 
-            var speed = Particle.rand.Next(SpeedMin, SpeedMax);
+                var speed = Particle.rand.Next(SpeedMin, SpeedMax);
 
-            particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
-            particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+                particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+                particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
 
-            particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
+                particle.Radius = Particle.rand.Next(RadiusMin, RadiusMax);
+        }
+
+        public void UpdateIm()
+        {
+            foreach (var particle in particles)
+            {
+                foreach (var point in impactPoints)
+                {
+                    point.ImpactParticle(particle);
+                }
+            }
         }
         public void UpdateState()
         {
-            int particlesToCreate = ParticlesPerTick;
+                int particlesToCreate = ParticlesPerTick;
 
-            foreach (var particle in particles)
-            {
-                if (particle.Life <= 0)
+                foreach (var particle in particles)
                 {
-                    if (particlesToCreate > 0)
+                    if (particle.Life <= 0)
                     {
-                        particlesToCreate -= 1;
-                        ResetParticle(particle);
+                        if (particlesToCreate > 0)
+                        {
+                            particlesToCreate -= 1;
+                            ResetParticle(particle);
+                        }
+                    }
+                    else
+                    {
+                        particle.Life -= 1;
+                        foreach (var point in impactPoints)
+                        {
+                            point.ImpactParticle(particle);
+                        }
+
+                        particle.SpeedX += GravitationX;
+                        particle.SpeedY += GravitationY;
+
+                        particle.X += particle.SpeedX;
+                        particle.Y += particle.SpeedY;
                     }
                 }
-                else
+
+                while (particlesToCreate >= 1)
                 {
-                    particle.Life -= 1;
-                    foreach (var point in impactPoints)
-                    {
-                        point.ImpactParticle(particle);
-                    }
-
-                    particle.SpeedX += GravitationX;
-                    particle.SpeedY += GravitationY;
-
-                    particle.X += particle.SpeedX;
-                    particle.Y += particle.SpeedY;
+                    particlesToCreate -= 1;
+                    var particle = CreateParticle();
+                    ResetParticle(particle);
+                    particles.Add(particle);
                 }
-            }
-
-            while (particlesToCreate >= 1)
-            {
-                particlesToCreate -= 1;
-                var particle = CreateParticle();
-                ResetParticle(particle);
-                particles.Add(particle);
-            }
         }
 
         public void Render(Graphics g)

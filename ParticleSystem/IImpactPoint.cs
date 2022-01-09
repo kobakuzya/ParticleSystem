@@ -100,34 +100,24 @@ namespace ParticleSystem
         {
             // буду рисовать окружность с диаметром равным Power
             g.DrawEllipse(
-                   new Pen(color),
-                   X - 50,
-                   Y - 50,
-                   100,
-                   100
+                   new Pen(color), // цвет точки(окружности)
+                   X - 25,
+                   Y - 25,
+                   50,
+                   50
                );
         }
         public override void ImpactParticle(ParticleColorful particle)
-        {
-            float gX = X - particle.X;
-            float gY = Y - particle.Y;
+        { 
+            float gX = X - particle.X; // расстояние между точкой и частицей по X
+            float gY = Y - particle.Y; // по Y
 
-            
             double r = Math.Sqrt(gX * gX + gY * gY); // считаем расстояние от центра точки до центра частицы
-            //if (r + particle.Radius < 100) // если частица оказалось внутри окружности
-            if (r<50)
+            // если расстояние между их центрами не больше суммы их радиусов
+            if (r < particle.Radius + 25)
             {
-                // то притягиваем ее
-                float r2 = (float)Math.Max(100, gX * gX + gY * gY);
-               // particle.color = Color.Red;
-                //particle.SpeedY = 0;
-               // particle.SpeedX = 0;
+                // меняем цвет частицы на цвет точки
                 particle.FromColor = color;
-                
-            }
-            else
-            {
-               // particle.FromColor = Color.White;
             }
         }
     }

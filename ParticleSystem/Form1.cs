@@ -14,30 +14,10 @@ namespace ParticleSystem
     {
         List<Emitter> emitters = new List<Emitter>();
         Emitter emitter;
-        /*
-        GravityPoint point1; // добавил поле под первую точку
-        GravityPoint point2;
-        */
-        ColorPoint point1;
         public Form1()
         {
             InitializeComponent();
             picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
-            /*
-            this.emitter = new Emitter // создаю эмиттер и привязываю его к полю emitter
-            {
-                Direction = 0,
-                Spreading = 10,
-                SpeedMin = 10,
-                SpeedMax = 10,
-                ColorFrom = Color.Gold,
-                ColorTo = Color.FromArgb(0, Color.Red),
-                ParticlesPerTick = 10,
-                X = picDisplay.Width / 2,
-                Y = picDisplay.Height / 2,
-            };*/
-
-            //emitters.Add(this.emitter);
 
             emitter = new TopEmitter
             {
@@ -51,116 +31,91 @@ namespace ParticleSystem
                 Width = picDisplay.Width,
                 GravitationY = 0f
             };
-            
-            /*point1 = new ColorPoint
-            {
-                X = picDisplay.Width / 2,
-                Y = picDisplay.Height / 2,
-            };
-            */
+            // ниже добавляю цветные круги
             emitter.impactPoints.Add(new ColorPoint
             {
-                X = (float)(picDisplay.Width * 0.25),
-                Y = picDisplay.Height / 2,
-                color = Color.Red
+                X = (float)(picDisplay.Width / 2 - 200),
+                Y = picDisplay.Height / 2 - 25,
+                color = Color.Cyan
             });
 
             emitter.impactPoints.Add(new ColorPoint
             {
-                X = (float)(picDisplay.Width/2),
-                Y = picDisplay.Height / 2,
+                X = (float)(picDisplay.Width / 2 - 150),
+                Y = picDisplay.Height / 2 - 20,
+                color = Color.HotPink
+            });
+
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width / 2 - 100),
+                Y = picDisplay.Height / 2 - 15,
+                color = Color.Green
+            });
+
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width / 2 - 50),
+                Y = picDisplay.Height / 2 - 10,
+                color = Color.OrangeRed
+            });
+
+            emitter.impactPoints.Add(new ColorPoint
+            {
+                X = (float)(picDisplay.Width / 2),
+                Y = picDisplay.Height / 2 - 5,
                 color = Color.Yellow
             });
 
             emitter.impactPoints.Add(new ColorPoint
             {
-                X = (float)(picDisplay.Width * 0.75f),
-                Y = picDisplay.Height / 2,
+                X = (float)(picDisplay.Width / 2 + 50),
+                Y = picDisplay.Height / 2 - 10,
                 color = Color.DarkBlue
             });
-            /*
-            point2 = new GravityPoint
-            {
-                X = picDisplay.Width / 2 - 100,
-                Y = picDisplay.Height / 2,
-            };
 
-            // привязываем поля к эмиттеру
-            //emitter.impactPoints.Add(point1);
-            emitter.impactPoints.Add(point2);
-            
-            
-            
             emitter.impactPoints.Add(new ColorPoint
             {
-                X = (float)(picDisplay.Width * 0.25),
-                Y = picDisplay.Height / 2
+                X = (float)(picDisplay.Width / 2 + 100),
+                Y = picDisplay.Height / 2 - 15,
+                color = Color.Red
             });
 
-            // в центре антигравитон
-            emitter.impactPoints.Add(new AntiGravityPoint
+            emitter.impactPoints.Add(new ColorPoint
             {
-                X = picDisplay.Width / 2,
-                Y = picDisplay.Height / 2
+                X = (float)(picDisplay.Width / 2 + 150),
+                Y = picDisplay.Height / 2 - 20,
+                color = Color.SaddleBrown
             });
 
-            // снова гравитон
-            emitter.impactPoints.Add(new GravityPoint
+            emitter.impactPoints.Add(new ColorPoint
             {
-                X = (float)(picDisplay.Width * 0.75),
-                Y = picDisplay.Height / 2
+                X = (float)(picDisplay.Width / 2 + 200),
+                Y = picDisplay.Height / 2 - 25,
+                color = Color.Purple
             });
-            */
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            emitter.UpdateState();
+            emitter.UpdateState(); // обновляем эмиттер
+
             using (var g = Graphics.FromImage(picDisplay.Image))
             {
                 g.Clear(Color.Black);
-                emitter.Render(g);
+                emitter.Render(g); // рендерим через эмиттер
             }
 
             picDisplay.Invalidate();
         }
-        private void picDisplay_MouseMove(object sender, MouseEventArgs e)
-        {
-            //emitter.MousePositionX = e.X;
-            //emitter.MousePositionY = e.Y;
-            /*
-            point2.X = e.X;
-            point2.Y = e.Y;
-            */
-        }
 
-        
-            //emitter.Direction = tbDirection.Value; // направлению эмиттера присваиваем значение ползунка
-            //lblDirection.Text = $"{tbDirection.Value}°";
-        
-
-        private void tbSpeed_Scroll(object sender, EventArgs e)
-        {
-            timer1.Interval = tbSpeed.Value;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            timer1.Enabled = !timer1.Enabled;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            timer1_Tick(sender, e);
-        }
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {         
             foreach (var p in emitter.impactPoints)
             {
-                if (p is ColorPoint) // так как impactPoints не обязательно содержит поле Power, надо проверить на тип 
+                // если эмиттер цветной круг
+                if (p is ColorPoint)
                 {
-                    // если гравитон то меняем силу
-                    (p as ColorPoint).Y = trackBar1.Value;
+                    p.Y += trackBar2.Value - p.Y; // меняем положение
                 }
             }
         }
