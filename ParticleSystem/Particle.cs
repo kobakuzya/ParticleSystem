@@ -29,35 +29,6 @@ namespace ParticleSystem
             Radius = 2 + rand.Next(10);
             Life = 20 + rand.Next(100);
         }
-
-        public void ShowInfo(Graphics g)
-        {
-            var stringFormat = new StringFormat(); // создаем экземпляр класса
-            stringFormat.Alignment = StringAlignment.Center; // выравнивание по горизонтали
-            stringFormat.LineAlignment = StringAlignment.Center;
-
-            var text = $"X: {X}\nY: {Y}";
-
-            var font = new Font("Verdana", 10);
-            var size = g.MeasureString(text, font);
-
-            g.FillRectangle(
-                new SolidBrush(Color.Red),
-                X - size.Width / 2,
-                Y - size.Height / 2,
-                size.Width,
-                size.Height
-            );
-            g.DrawString(
-                text,
-                font,
-                new SolidBrush(Color.White),
-                X,
-                Y,
-                stringFormat
-            );
-        }
-
         public virtual void Draw(Graphics g)
         {
             float k = Math.Min(1f, Life / 100); //коэффициент прозрачности по шкале от 0 до 1.0
@@ -73,7 +44,6 @@ namespace ParticleSystem
             b.Dispose();
         }
     }
-
     public class ParticleColorful : Particle
     {
         // два новых поля под цвет начальный и конечный

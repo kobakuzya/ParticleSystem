@@ -19,7 +19,6 @@ namespace ParticleSystem
         public int LifeMin = 20; // минимальное время жизни частицы
         public int LifeMax = 100; // максимальное время жизни частицы
         public int ParticlesCount = 500;
-        public bool a = true;
         public Color ColorFrom = Color.White; // начальный цвет частицы
         public Color ColorTo = Color.FromArgb(0, Color.Black); // конечный цвет частиц
 
